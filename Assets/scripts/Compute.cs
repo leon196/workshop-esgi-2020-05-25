@@ -40,4 +40,9 @@ public class Compute : MonoBehaviour
 		compute.Dispatch(0, array.Length/8, 1, 1);
 		material.SetBuffer("_Buffer", buffer);
 	}
+
+	void OnDestroy ()
+	{
+		if (buffer != null) buffer.Dispose();
+	}
 }
