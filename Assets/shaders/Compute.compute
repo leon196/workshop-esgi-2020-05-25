@@ -1,0 +1,13 @@
+﻿#pragma kernel compute
+
+struct Attribute {
+	float3 position;
+	float3 normal;
+};
+RWStructuredBuffer<Attribute> _Buffer;
+
+[numthreads(8,1,1)]
+void compute (uint3 id : SV_DispatchThreadID)
+{
+    // _Buffer[id.x].position = float3(id.x * 0.001, id.x*.01, 0);
+}

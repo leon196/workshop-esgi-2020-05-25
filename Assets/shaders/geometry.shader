@@ -26,6 +26,7 @@
                 float4 position : POSITION;
                 float3 normal : NORMAL;
                 float2 texcoord : TEXCOORD0;
+                uint id : SV_VertexID;
             };
 
             struct varyingGeometry
@@ -44,10 +45,21 @@
             uniform sampler2D _MainTex;
             uniform float _Size, _CameraRangeMin, _CameraRangeMax;
 
+            #ifdef SHADER_API_D3D11
+            struct Attribute {
+				float3 position;
+				float3 normal;
+            };
+            StructuredBuffer<Attribute> _Buffer;
+            #endif
+
             varyingGeometry vert (attribute v)
             {
                 varyingGeometry o;
                 o.position = v.position;
+            	#ifdef SHADER_API_D3D11
+            	o.position.xyz = _Buffer[v.id].position;
+            	#endif
                 o.texcoord = v.texcoord;
                 o.normal = v.normal;
                 return o;
