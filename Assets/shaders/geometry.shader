@@ -61,7 +61,7 @@
             	o.position = v.position;
             	o.texcoord = v.texcoord;
             	varying origin;
-            	origin.position = UnityObjectToClipPos(v.position);
+            	origin.position = UnityObjectToClipPos(v.position + float4(v.normal * 0.01, 0));
             	origin.texcoord = v.texcoord;
             	// float3 c = mul(unity_WorldToObject, float4(_WorldSpaceCameraPos, 1));
             	// float d = length(_WorldSpaceCameraPos - mul(UNITY_MATRIX_M, v.position).xyz);
