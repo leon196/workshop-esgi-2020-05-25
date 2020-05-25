@@ -1,13 +1,26 @@
 ﻿#pragma kernel compute
+#include "Common.cginc"
 
 struct Attribute {
 	float3 position;
+	float3 origin;
 	float3 normal;
 };
 RWStructuredBuffer<Attribute> _Buffer;
 
+uniform float _Time;
+
 [numthreads(8,1,1)]
 void compute (uint3 id : SV_DispatchThreadID)
 {
-    // _Buffer[id.x].position = float3(id.x * 0.001, id.x*.01, 0);
+	Attribute buffer = _Buffer[id.x];
+	float3 seed = buffer.position * 40.0;
+	float3 turbulence = float3(
+		noiseIQ(seed),
+		noiseIQ(seed+float3(.548,1.54,57.578)),
+		noiseIQ(seed+float3(8.5487,534.246,89.48)))*2-1;
+	float3 direction = normalize(buffer.origin - buffer.position + 0.001);
+	direction *= smoothstep(0.001, 0.01, length(buffer.origin - buffer.position));
+	float should = 0.5 + 0.5 * sin(_Time);
+    _Buffer[id.x].position += lerp(turbulence, direction, should) * 0.003;
 }

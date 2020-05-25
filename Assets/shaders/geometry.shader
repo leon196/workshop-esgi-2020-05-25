@@ -48,6 +48,7 @@
             #ifdef SHADER_API_D3D11
             struct Attribute {
 				float3 position;
+				float3 origin;
 				float3 normal;
             };
             StructuredBuffer<Attribute> _Buffer;

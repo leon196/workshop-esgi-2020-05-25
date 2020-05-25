@@ -12,6 +12,7 @@ public class Compute : MonoBehaviour
 
 	struct Attribute {
 		public Vector3 position;
+		public Vector3 origin;
 		public Vector3 normal;
 	};
 	private Attribute[] array;
@@ -24,8 +25,10 @@ public class Compute : MonoBehaviour
 		array = new Attribute[vertices.Length];
 		for (uint index = 0; index < array.Length; ++index) {
 			array[index].position = vertices[index];
+			array[index].origin = vertices[index];
 			array[index].normal = normals[index];
 		}
+
 		buffer = new ComputeBuffer(array.Length, Marshal.SizeOf(typeof(Attribute)));
 		buffer.SetData(array);
 
@@ -36,7 +39,10 @@ public class Compute : MonoBehaviour
 
 	void Update ()
 	{
+		// only if unity editor (allowing hot reload shader)
 		compute.SetBuffer(0, "_Buffer", buffer);
+
+		compute.SetFloat("_Time", Time.time);
 		compute.Dispatch(0, array.Length/8, 1, 1);
 		material.SetBuffer("_Buffer", buffer);
 	}
