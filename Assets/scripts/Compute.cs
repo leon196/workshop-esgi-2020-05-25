@@ -6,6 +6,7 @@ using UnityEngine;
 public class Compute : MonoBehaviour
 {
 	public ComputeShader compute;
+	public Transform target;
 
 	private ComputeBuffer buffer;
 	private Material material;
@@ -41,6 +42,8 @@ public class Compute : MonoBehaviour
 	{
 		// only if unity editor (allowing hot reload shader)
 		compute.SetBuffer(0, "_Buffer", buffer);
+		compute.SetVector("_Target", target.position);
+		compute.SetMatrix("_Matrix", transform.worldToLocalMatrix);
 
 		compute.SetFloat("_Time", Time.time);
 		compute.Dispatch(0, array.Length/8, 1, 1);
