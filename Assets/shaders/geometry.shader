@@ -48,6 +48,7 @@
             #ifdef SHADER_API_D3D11
             struct Attribute {
 				float3 position;
+				float3 velocity;
 				float3 origin;
 				float3 normal;
             };
@@ -76,10 +77,10 @@
             	varying origin;
             	origin.position = UnityObjectToClipPos(v.position + float4(v.normal * 0.01, 0));
             	origin.texcoord = v.texcoord;
-            	// float3 c = mul(unity_WorldToObject, float4(_WorldSpaceCameraPos, 1));
+            	float3 c = mul(unity_WorldToObject, float4(_WorldSpaceCameraPos, 1));
             	// float d = length(_WorldSpaceCameraPos - mul(UNITY_MATRIX_M, v.position).xyz);
-            	// float3 z = normalize(c - v.position.xyz);
-            	float3 z = v.normal;
+            	float3 z = normalize(c - v.position.xyz);
+            	// float3 z = v.normal;
             	float3 x = normalize(cross(z,float3(0,1,0)));
             	float3 y = normalize(cross(z,x));
             	float angle = 0;

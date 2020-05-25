@@ -3,6 +3,7 @@
 
 struct Attribute {
 	float3 position;
+	float3 velocity;
 	float3 origin;
 	float3 normal;
 };
@@ -23,6 +24,13 @@ void compute (uint3 id : SV_DispatchThreadID)
 		noiseIQ(seed+float3(8.5487,534.246,89.48)))*2-1;
 	float3 direction = normalize(buffer.origin - buffer.position + 0.001);
 	direction *= smoothstep(0.01, 0.2, length(buffer.origin - buffer.position));
-	float should = smoothstep(0.01, 0.1, length(mul(_Matrix, float4(_Target,1)).xyz - buffer.position));
-    _Buffer[id.x].position += lerp(turbulence, direction, should) * 0.03;
+
+	float3 target = mul(_Matrix, float4(_Target,1)).xyz;
+	float3 attract = normalize(target - buffer.position);
+
+	float should = smoothstep(0.01, 0.1, length(target - buffer.position));
+
+	_Buffer[id.x].velocity *= 0.9;
+    _Buffer[id.x].velocity += lerp(turbulence + attract, direction, should) * 0.005;
+    _Buffer[id.x].position += _Buffer[id.x].velocity;
 }

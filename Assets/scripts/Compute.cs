@@ -13,6 +13,7 @@ public class Compute : MonoBehaviour
 
 	struct Attribute {
 		public Vector3 position;
+		public Vector3 velocity;
 		public Vector3 origin;
 		public Vector3 normal;
 	};
@@ -26,6 +27,7 @@ public class Compute : MonoBehaviour
 		array = new Attribute[vertices.Length];
 		for (uint index = 0; index < array.Length; ++index) {
 			array[index].position = vertices[index];
+			array[index].velocity = Vector3.zero;
 			array[index].origin = vertices[index];
 			array[index].normal = normals[index];
 		}
